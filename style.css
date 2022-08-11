@@ -1,0 +1,144 @@
+.status_Available{
+	color: #ff6868;
+	text-align: center;
+}
+
+.status_Busy{
+	color: #91ff93;
+	text-align: center;
+}
+
+@keyframes spin {
+	from {
+	  transform: rotate(0);
+	}
+	to{
+	  transform: rotate(359deg);
+	}
+}
+
+.spinner-box {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: transparent;
+	width: 15rem;
+}
+
+@keyframes pulse {
+	from {
+	  opacity: 1;
+	  transform: scale(1);
+	}
+	to {
+	  opacity: .25;
+	  transform: scale(.75);
+	}
+  }
+
+
+.pulse-container {
+	width: 60px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.pulse-bubble {
+	width: 13px;
+	height: 13px;
+	border-radius: 50%;
+	background: #319CFF;
+}
+  
+.pulse-bubble-1 {
+	animation: pulse .4s ease 0s infinite alternate;
+}
+.pulse-bubble-2 {
+	animation: pulse .4s ease .2s infinite alternate;
+}
+.pulse-bubble-3 {
+	animation: pulse .4s ease .4s infinite alternate;
+}
+
+#server_manager_menu {
+	display: flex;
+	width: 900px;
+	margin: 0 auto 40px auto;
+	background: #333541;
+	border-radius: 50px;
+	justify-content: space-between;
+	padding: 3px;
+}
+
+#server_manager_menu > label {
+	width: 100%;
+	line-height: 40px;
+	text-align: center;
+	border-radius: 50px;
+	cursor: pointer;
+}
+
+#server-Tournament-toggler:checked ~ #server_manager_menu label[for="server-Tournament-toggler"],
+#server-DangerZone-toggler:checked ~ #server_manager_menu label[for="server-DangerZone-toggler"],
+#server-Duels-toggler:checked ~ #server_manager_menu label[for="server-Duels-toggler"],
+#server-GunGame-toggler:checked ~ #server_manager_menu label[for="server-GunGame-toggler"],
+#server-GameServers-toggler:checked ~ #server_manager_menu label[for="server-GameServers-toggler"] {
+	background: linear-gradient(255.43deg, #FE9901 -5.56%, #C35F17 106.02%), #3F3F3F;
+}
+
+#server-Tournament-toggler:checked ~ .manager-box.Tournament, #server-DangerZone-toggler:checked ~ .manager-box.DangerZone, #server-Duels-toggler:checked ~ .manager-box.Duels, #server-GunGame-toggler:checked ~ .manager-box.GunGame , #server-GameServers-toggler:checked ~ .manager-box.GameServers {
+    display: block;
+}
+
+#servers_manage .manager-box {
+    display: none;
+}
+
+.manager-box{
+	overflow: auto;
+}
+
+@media screen and (max-width: 1024px) {
+	.manager_btn > div{
+		width: 15rem !important;
+	}
+
+	#server_manager_menu{
+		width: 830px;
+		row-gap: 10px;
+		border-radius: 500px;
+	}
+}
+
+@media screen and (max-width: 1000px) {
+	.manager_btn > div{
+		width: 15rem !important;
+	}
+
+	#server_manager_menu{
+		width: 250px;
+		row-gap: 10px;
+		flex-wrap: wrap;
+		border-radius: 20px;
+	}
+}
+
+.manager_btn > div{
+    width: 20%;
+    height: 20px;
+    padding: 10px 0 !important;
+    margin-right: 13px !important;
+    align-items: center;
+}
+
+.response_complete{
+	color: #5aef73;
+}
+
+.response_info{
+	color: #ebc246;
+}
+
+.response_warn{
+	
