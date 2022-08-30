@@ -1,3 +1,5 @@
+/* Server Manager */
+
 .status_Available{
 	color: #ff6868;
 	text-align: center;
@@ -22,7 +24,9 @@
 	justify-content: center;
 	align-items: center;
 	background-color: transparent;
-	width: 15rem;
+	/* width: 12rem;
+	height: 45px; */
+	margin: 0 auto;
 }
 
 @keyframes pulse {
@@ -38,15 +42,15 @@
 
 
 .pulse-container {
-	width: 60px;
+	width: 50px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 }
 
 .pulse-bubble {
-	width: 13px;
-	height: 13px;
+	width: 11px;
+	height: 11px;
 	border-radius: 50%;
 	background: #319CFF;
 }
@@ -64,9 +68,9 @@
 #server_manager_menu {
 	display: flex;
 	width: 900px;
-	margin: 0 auto 40px auto;
+	margin: 0 auto 35px auto;
 	background: #333541;
-	border-radius: 50px;
+	border-radius: 12px;
 	justify-content: space-between;
 	padding: 3px;
 }
@@ -75,8 +79,9 @@
 	width: 100%;
 	line-height: 40px;
 	text-align: center;
-	border-radius: 50px;
+	border-radius: 12px;
 	cursor: pointer;
+	user-select: none;
 }
 
 #server-Tournament-toggler:checked ~ #server_manager_menu label[for="server-Tournament-toggler"],
@@ -84,14 +89,25 @@
 #server-Duels-toggler:checked ~ #server_manager_menu label[for="server-Duels-toggler"],
 #server-GunGame-toggler:checked ~ #server_manager_menu label[for="server-GunGame-toggler"],
 #server-GameServers-toggler:checked ~ #server_manager_menu label[for="server-GameServers-toggler"] {
-	background: linear-gradient(255.43deg, #FE9901 -5.56%, #C35F17 106.02%), #3F3F3F;
+	background: linear-gradient(to right, #CC6813, #F69104), #3F3F3F;
+	user-select: none;
 }
 
-#server-Tournament-toggler:checked ~ .manager-box.Tournament, #server-DangerZone-toggler:checked ~ .manager-box.DangerZone, #server-Duels-toggler:checked ~ .manager-box.Duels, #server-GunGame-toggler:checked ~ .manager-box.GunGame , #server-GameServers-toggler:checked ~ .manager-box.GameServers {
+#server-Tournament-toggler:checked ~ .manager-box.Tournament, #server-Tournament-toggler:checked ~ .manager-box.tournament_location,#server-DangerZone-toggler:checked ~ .manager-box.DangerZone, #server-Duels-toggler:checked ~ .manager-box.Duels, #server-GunGame-toggler:checked ~ .manager-box.GunGame , #server-GameServers-toggler:checked ~ .manager-box.GameServers, .manager-box.tournament_location {
+    display: block;
+	width: 70rem;
+    margin: 0 auto;
+}
+
+#server-Tournament-toggler:checked ~ .manager-box.error_manager, #server-DangerZone-toggler:checked ~ .manager-box.error_manager, #server-GunGame-toggler:checked ~ .manager-box.error_manager, #server-GameServer-toggler:checked ~ .manager-box.error_manager, #server-Duels-toggler:checked ~ .manager-box.error_manager {
     display: block;
 }
 
 #servers_manage .manager-box {
+    display: none;
+}
+
+.manager-box {
     display: none;
 }
 
@@ -117,19 +133,35 @@
 	}
 
 	#server_manager_menu{
-		width: 250px;
+		width: 42rem;
+		font-size: 13px;
 		row-gap: 10px;
-		flex-wrap: wrap;
 		border-radius: 20px;
+		margin-top: 50px;
+	}
+
+	.manager_btn{
+		flex-wrap: wrap;
+		row-gap: 15px;
+		width: 100px;
+		margin: 0 auto 15px;
+		height: auto !important;
+	}
+
+	.tournament_location{
+		width: 45rem !important;
+	}
+
+	
+	#server-Tournament-toggler:checked ~ .manager-box.Tournament, #server-DangerZone-toggler:checked ~ .manager-box.DangerZone, #server-Duels-toggler:checked ~ .manager-box.Duels, #server-GunGame-toggler:checked ~ .manager-box.GunGame, #server-GameServers-toggler:checked ~ .manager-box.GameServers{
+		width: 45rem;
 	}
 }
 
 .manager_btn > div{
-    width: 20%;
-    height: 20px;
+	width: 62px;
     padding: 10px 0 !important;
     margin-right: 13px !important;
-    align-items: center;
 }
 
 .response_complete{
@@ -141,4 +173,44 @@
 }
 
 .response_warn{
-	
+	color: #ed5c52;
+}
+
+.one_tournament_server {
+    font-size: 12px;
+}
+
+.tournament_location{
+	padding: 10px 10px 0px 10px !important;
+    background: #333541 !important;
+    border-radius: 10px 10px 0 0 !important;
+    margin: 15px auto 0 !important;
+    text-align: left !important;
+    border-bottom: 0 !important;
+}
+
+.tournament_location .location{
+    background: linear-gradient(to left, #319CFF, #7D40FF), #3F3F3F;
+    border-radius: 5px;
+    padding: 5px 0px 5px 15px;
+    font-size: 18px;
+	user-select: none;
+}
+
+.manager_btn{
+    height: 66px;
+    align-items: center;
+	justify-content: center;
+}
+
+.tournament_server_ip {
+    padding: 10px !important;
+}
+
+.tournament_server_location{
+	text-align: center;
+}
+
+.tournament_server_location img{
+	width: 25px;
+}
