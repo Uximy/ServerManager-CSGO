@@ -43,16 +43,32 @@ function start_server(server_id, mode) {
         data: { request: 'start_server', server_id, gamemode},
         success: function (response) {
             console.log(response);
-            result = response.match(/OK|already running/);
-
-            if (result == 'OK')
-                $('#'+gamemode+'_'+server_id).html('Сервер <span class="status_Busy">ONLINE</span>');
-            else if(result == 'already running')
-                $('#'+gamemode+'_'+server_id).html('Сервер уже <span class="status_Busy">ONLINE</span>');
-            else{
-                $('#'+gamemode+'_'+server_id).addClass('response_warn');
-                $('#'+gamemode+'_'+server_id).text('Возникла непредвиденная ошибка, обратитесть к разроботчику!');
+            $('#'+gamemode+'_'+server_id).removeClass('response_complete');
+            $('#'+gamemode+'_'+server_id).removeClass('response_info');
+            $('#'+gamemode+'_'+server_id).removeClass('response_warn');
+            try {
+                result = response.match(/OK|already running/);
+    
+                if (result == 'OK')
+                    $('#'+gamemode+'_'+server_id).html('Сервер <span class="status_Busy">ONLINE</span>');
+                else if(result == 'already running')
+                    $('#'+gamemode+'_'+server_id).html('Сервер уже <span class="status_Busy">ONLINE</span>');
+                else{
+                    $('#'+gamemode+'_'+server_id).addClass('response_warn');
+                    result = response.match(/executable was not found/);
+                    if (result == 'executable was not found') {
+                        $('#'+gamemode+'_'+server_id).html('Файл запуска <b>srcds_run</b> не найден, обратитесь к администраторам сервера!');
+                    }else{
+                        $('#'+gamemode+'_'+server_id).text('Возникла непредвиденная ошибка, обратитесть к разроботчику!');
+                    }
+                }
+            } catch (error) {
+                if (response === 'error_with_connection') {
+                    $('#'+gamemode+'_'+server_id).addClass('response_warn');
+                    $('#'+gamemode+'_'+server_id).text(`Неудаётся приконектиться к серверу, проверьте логин и пароль в базе`);
+                }
             }
+           
         },
         error: function (response) {
             console.error(response);
@@ -71,13 +87,24 @@ function stop_server(server_id, mode) {
         data: { request: 'stop_server', server_id, gamemode},
         success: function (response) {
             console.log(response);
-            if (response == 0)
-                $('#'+gamemode+'_'+server_id).html('Сервер <span class="status_Available">OFFLINE</span>');
-            else{
-                $('#'+gamemode+'_'+server_id).addClass('response_warn');
-                $('#'+gamemode+'_'+server_id).text('Возникла непредвиденная ошибка, обратитесть к разроботчику!');
+            $('#'+gamemode+'_'+server_id).removeClass('response_complete');
+            $('#'+gamemode+'_'+server_id).removeClass('response_info');
+            $('#'+gamemode+'_'+server_id).removeClass('response_warn');
+            try {
+                if (response == 0)
+                    $('#'+gamemode+'_'+server_id).html('Сервер <span class="status_Available">OFFLINE</span>');
+                else{
+                    $('#'+gamemode+'_'+server_id).addClass('response_warn');
+                    $('#'+gamemode+'_'+server_id).text('Возникла непредвиденная ошибка, обратитесть к разроботчику!');
+                }
+            } catch (error) {
+
+                if (response === 'error_with_connection') {
+                    $('#'+gamemode+'_'+server_id).addClass('response_warn');
+                    $('#'+gamemode+'_'+server_id).text(`Неудаётся приконектиться к серверу, проверьте логин и пароль в базе`);
+                }
             }
-            
+           
         },
         error: function (response) {
             console.error(response);
@@ -96,8 +123,24 @@ function restart_server(server_id, mode) {
         data: { request: 'restart_server', server_id, gamemode},
         success: function (response) {
             console.log(response);
-            $('#'+gamemode+'_'+server_id).addClass('response_complete');
-            $('#'+gamemode+'_'+server_id).text('Сервер перезапустился');
+            try {
+                $('#'+gamemode+'_'+server_id).removeClass('response_info');
+                $('#'+gamemode+'_'+server_id).removeClass('response_warn');
+    
+                result = response.match(/executable was not found/);
+                if (result == 'executable was not found') {
+                    $('#'+gamemode+'_'+server_id).addClass('response_warn');
+                    $('#'+gamemode+'_'+server_id).text('Файл запуска не найден, обратитесь к администраторам сервера!');
+                }else{
+                    $('#'+gamemode+'_'+server_id).addClass('response_complete');
+                    $('#'+gamemode+'_'+server_id).text('Сервер перезапустился');
+                }
+            } catch (error) {
+                if (response === 'error_with_connection') {
+                    $('#'+gamemode+'_'+server_id).addClass('response_warn');
+                    $('#'+gamemode+'_'+server_id).text(`Неудаётся приконектиться к серверу, проверьте логин и пароль в базе`);
+                }
+            }
         },
         error: function (response) {
             console.error(response);
@@ -115,21 +158,28 @@ function status_server(server_id, mode) {
         dataType: 'json',
         data: { request: 'status_server', server_id, gamemode},
         success: function (response) {
-            console.log(response);
-            result = response.match(/ONLINE|OFFLINE|STARTED|STOPPED/);
-            if (result == 'STARTED') 
-                result[0] = 'ONLINE';
-            else if(result == 'STOPPED')
-                result[0] = 'OFFLINE';
-
-            if (result[0] == 'ONLINE')
-                result[1] = 'status_Busy';
-            else if (result == 'OFFLINE')
-                result[1] = 'status_Available';
+            // console.log(response); // вывод весь результат
             $('#'+gamemode+'_'+server_id).removeClass('response_complete');
             $('#'+gamemode+'_'+server_id).removeClass('response_info');
             $('#'+gamemode+'_'+server_id).removeClass('response_warn');
-            $('#'+gamemode+'_'+server_id).html(`Статус сервера: <span class="${result[1]}">${result[0]}</span>`);
+            try {
+                result = response.match(/ONLINE|OFFLINE|STARTED|STOPPED/);
+                if (result == 'STARTED') 
+                    result[0] = 'ONLINE';
+                else if(result == 'STOPPED')
+                    result[0] = 'OFFLINE';
+    
+                if (result[0] == 'ONLINE')
+                    result[1] = 'status_Busy';
+                else if (result == 'OFFLINE')
+                    result[1] = 'status_Available';
+                $('#'+gamemode+'_'+server_id).html(`Статус сервера: <span class="${result[1]}">${result[0]}</span>`);
+            } catch (error) {
+                if (response === 'error_with_connection') {
+                    $('#'+gamemode+'_'+server_id).addClass('response_warn');
+                    $('#'+gamemode+'_'+server_id).text(`Неудаётся приконектиться к серверу, проверьте логин и пароль в базе`);
+                }
+            }
         },
         error: function (response) {
             console.error(response);
@@ -141,6 +191,9 @@ function status_server(server_id, mode) {
 
 function update_server(server_id, mode) {
     $('#'+get_mode(mode)+'_'+server_id).html(loader);
+    $('#'+gamemode+'_'+server_id).removeClass('response_complete');
+    $('#'+gamemode+'_'+server_id).removeClass('response_info');
+    $('#'+gamemode+'_'+server_id).removeClass('response_warn');
     $.ajax({
         url: 'handler.php',
         type: 'POST',
@@ -148,21 +201,38 @@ function update_server(server_id, mode) {
         data: { request: 'update_server', server_id, gamemode},
         success: function (response) {
             console.log(response);
-            let local_build = response.match(/(Local build): \D+[0-9]{2}m([0-9]*)/)[2];
-            let remote_build = response.match(/(Remote build:) \D+[0-9]{2}m([0-9]*)/)[2];
-            let complete = response.match(/\D+[0-9]{2}m(Complete)/);
+            try {
+                let local_build = response.match(/(Local build): \D+[0-9]{2}m([0-9]*)/)[2];
+                let remote_build = response.match(/(Remote build:) \D+[0-9]{2}m([0-9]*)/)[2];
+                let complete = response.match(/\D+[0-9]{2}m(Complete)/);
 
-            if (local_build == remote_build) {
-                $('#'+gamemode+'_'+server_id).addClass('response_info');
-                $('#'+gamemode+'_'+server_id).text('В данный момент сервер уже обновлён!');
-            }
+                if (local_build == remote_build) {
+                    $('#'+gamemode+'_'+server_id).addClass('response_info');
+                    $('#'+gamemode+'_'+server_id).text('В данный момент сервер уже обновлён!');
+                }
 
-            if (complete) {
-                if (complete[1] == 'Complete') {
-                    $('#'+gamemode+'_'+server_id).addClass('response_complete');
-                    $('#'+gamemode+'_'+server_id).text('Обновление сервера прошло успешно!');
+                if (complete) {
+                    if (complete[1] == 'Complete') {
+                        $('#'+gamemode+'_'+server_id).addClass('response_complete');
+                        $('#'+gamemode+'_'+server_id).text('Обновление сервера прошло успешно!');
+                    }
+                }
+                if (response === 'error_with_connection') {
+                    $('#'+gamemode+'_'+server_id).removeClass('response_warn');
+                    $('#'+gamemode+'_'+server_id).html(`Неудаётся приконектиться к серверу, проверьте логин и пароль в базе`);
+                }
+            } catch (error) {
+                error = response.match(/betapassword is incorrect/);
+                if(error == 'betapassword is incorrect'){
+                    $('#'+gamemode+'_'+server_id).addClass('response_warn');
+                    $('#'+gamemode+'_'+server_id).text('Неверный бета-пароль, обратитесь к администратору сервера!');
+                }
+                if (response === 'error_with_connection') {
+                    $('#'+gamemode+'_'+server_id).addClass('response_warn');
+                    $('#'+gamemode+'_'+server_id).text(`Неудаётся приконектиться к серверу, проверьте логин и пароль в базе`);
                 }
             }
+            
             
         },
         error: function (response) {
@@ -181,18 +251,30 @@ function check_update_server(server_id, mode) {
         dataType: 'json',
         data: { request: 'check_update_server', server_id, gamemode},
         success: function (response) {
-            //  let local_build = response.match(/(Local build:) \D+32m([0-9]*)/)[2];
             console.log(response);
-             let local_build = response.match(/(Local build): \D+[0-9]{2}m([0-9]*)/)[2];
-             let remote_build = response.match(/(Remote build:) \D+[0-9]{2}m([0-9]*)/)[2];
-            if (local_build !== remote_build) {
-                $('#'+gamemode+'_'+server_id).addClass('response_complete');
-                $('#'+gamemode+'_'+server_id).text('У вас есть обновление, нажмите на кнопку "Обновить" чтобы обновить сервер');
+            try {  
+                let local_build = response.match(/(Local build): \D+[0-9]{2}m([0-9]*)/)[2];
+                let remote_build = response.match(/(Remote build:) \D+[0-9]{2}m([0-9]*)/)[2];
+                if (local_build !== remote_build) {
+                    $('#'+gamemode+'_'+server_id).addClass('response_complete');
+                    $('#'+gamemode+'_'+server_id).text('У вас есть обновление, нажмите на кнопку "Обновить" чтобы обновить сервер');
+                }
+                else{
+                    $('#'+gamemode+'_'+server_id).addClass('response_info');
+                    $('#'+gamemode+'_'+server_id).text('В данный момент сервер уже обновлён!');
+                }
+            } catch (error) {
+                error = response.match(/betapassword is incorrect/);
+                if(error == 'betapassword is incorrect'){
+                    $('#'+gamemode+'_'+server_id).addClass('response_warn');
+                    $('#'+gamemode+'_'+server_id).text('Неверный бета-пароль, обратитесь к администратору сервера!');
+                }
+                if (response === 'error_with_connection') {
+                    $('#'+gamemode+'_'+server_id).addClass('response_warn');
+                    $('#'+gamemode+'_'+server_id).text(`Неудаётся приконектиться к серверу, проверьте логин и пароль в базе`);
+                }
             }
-            else{
-                $('#'+gamemode+'_'+server_id).addClass('response_info');
-                $('#'+gamemode+'_'+server_id).text('В данный момент сервер уже обновлён!');
-            }
+            
         },
         error: function (response) {
             console.error(response);
@@ -234,18 +316,18 @@ else {
 
 //? Добавление в адресную строку параметры
 
-// $('label[for="server-Tournament-toggler"]').click(function(){
-//     history.pushState(null, null, '/server_manager/');
-// });
-// $('label[for="server-DangerZone-toggler"]').click(function(){
-//     history.pushState(null, null, '/server_manager/?DangerZone');
-// });
-// $('label[for="server-Duels-toggler"]').click(function(){
-//     history.pushState(null, null, '/server_manager/?Duels');
-// });
-// $('label[for="server-GunGame-toggler"]').click(function(){
-//     history.pushState(null, null, '/server_manager/?GunGame');
-// });
-// $('label[for="server-GameServers-toggler"]').click(function(){
-//     history.pushState(null, null, '/server_manager/?GameServer');
-// });
+$('label[for="server-Tournament-toggler"]').click(function(){
+    history.pushState(null, null, '/server_manager/');
+});
+$('label[for="server-DangerZone-toggler"]').click(function(){
+    history.pushState(null, null, '/server_manager/?DangerZone');
+});
+$('label[for="server-Duels-toggler"]').click(function(){
+    history.pushState(null, null, '/server_manager/?Duels');
+});
+$('label[for="server-GunGame-toggler"]').click(function(){
+    history.pushState(null, null, '/server_manager/?GunGame');
+});
+$('label[for="server-GameServers-toggler"]').click(function(){
+    history.pushState(null, null, '/server_manager/?GameServer');
+});
