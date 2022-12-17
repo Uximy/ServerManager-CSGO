@@ -66,7 +66,7 @@ if (isset($_POST['request']) && $_POST['request'] == 'start_server') {
 
     if (str_replace('\n', '', function_exists('ssh2_connect')) == true) {
         $sshConnection = ssh2_connect($server['ip'], $server['port']);
-        $authResult = ssh2_auth_password($sshConnection, $server['user_name'], 'karamba228');
+        $authResult = ssh2_auth_password($sshConnection, $server['user_name'], 'password');
 
         if ($authResult === true) {
             $stream = ssh2_exec($sshConnection, './csgoserver start');
@@ -89,7 +89,7 @@ if (isset($_POST['request']) && $_POST['request'] == 'stop_server') {
 
     if (str_replace('\n', '', function_exists('ssh2_connect')) == true) {
         $sshConnection = ssh2_connect($server['ip'], $server['port']);
-        $authResult = ssh2_auth_password($sshConnection, $server['user_name'], 'karamba228');
+        $authResult = ssh2_auth_password($sshConnection, $server['user_name'], 'password');
 
         if ($authResult === true) {
             $stream = ssh2_exec($sshConnection, './csgoserver stop');
@@ -112,7 +112,7 @@ if (isset($_POST['request']) && $_POST['request'] == 'restart_server') {
 
     if (str_replace('\n', '', function_exists('ssh2_connect')) == true) {
         $sshConnection = ssh2_connect($server['ip'], $server['port']);
-        $authResult = ssh2_auth_password($sshConnection, $server['user_name'], 'karamba228');
+        $authResult = ssh2_auth_password($sshConnection, $server['user_name'], 'password');
 
         if ($authResult === true) {
             $stream = ssh2_exec($sshConnection, './csgoserver restart');
@@ -135,7 +135,7 @@ if (isset($_POST['request']) && $_POST['request'] == 'status_server') {
 
     if (str_replace('\n', '', function_exists('ssh2_connect')) == true) {
         $sshConnection = ssh2_connect($server['ip'], $server['port']);
-        $authResult = ssh2_auth_password($sshConnection, $server['user_name'], 'karamba228');
+        $authResult = ssh2_auth_password($sshConnection, $server['user_name'], 'password');
 
         if ($authResult === true) {
             $stream = ssh2_exec($sshConnection, './csgoserver dt');
@@ -158,7 +158,7 @@ if (isset($_POST['request']) && $_POST['request'] == 'update_server') {
 
     if (str_replace('\n', '', function_exists('ssh2_connect')) == true) {
         $sshConnection = ssh2_connect($server['ip'], $server['port']);
-        $authResult = ssh2_auth_password($sshConnection, $server['user_name'], 'karamba228');
+        $authResult = ssh2_auth_password($sshConnection, $server['user_name'], 'password');
 
         if ($authResult === true) {
             $stream = ssh2_exec($sshConnection, './csgoserver cu');
@@ -219,7 +219,7 @@ if (isset($_POST['request']) && $_POST['request'] == 'check_update_server') {
 
     if (str_replace('\n', '', function_exists('ssh2_connect')) == true) {
         $sshConnection = ssh2_connect($server['ip'], $server['port']);
-        $authResult = ssh2_auth_password($sshConnection, $server['user_name'], 'karamba228');
+        $authResult = ssh2_auth_password($sshConnection, $server['user_name'], 'password');
 
         if ($authResult === true) {
             $stream = ssh2_exec($sshConnection, './csgoserver cu');
