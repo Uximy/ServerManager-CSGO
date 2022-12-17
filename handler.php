@@ -1,11 +1,6 @@
 <? // Server manager handler
 require_once($_SERVER['DOCUMENT_ROOT'] . '/global.php');
 
-/* $servers = [
-    "1" => ["ip" => "46.148.138.77", "port" => "2233", "user_name" => "public2", "path" => "/home/public2/"],
-    "19" => ["ip" => "46.148.138.77", "port" => "2233", "user_name" => "server16", "path" => "/home1/server16/"],
-    "20" => ["ip" => "46.148.138.77","port" => "2233","user_name" => "server17","path" => "/home1/server17/"]
-   ];*/
 $id_server = strip_tags($_POST['server_id']);
 $game_mode = strip_tags($_POST['gamemode']);
 $sql_tr = "SELECT * FROM servers WHERE server_id=$id_server";
